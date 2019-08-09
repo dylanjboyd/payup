@@ -26,16 +26,24 @@
                         <th scope="row">{{ record.date_processed }}</th>
                         <td>{{ holder_map|get_item:record.reference }}</td>
                         <td class="text-monospace">{{ record.description|truncatechars:45 }}</td>
-                        <td class="text-monospace"><span class="float-left">$</span><span
-                                class="float-right {% if record.amount < 0 %}text-success font-weight-bold{% endif %}">{{ record.amount|intcomma }}</span>
-                        </td>
+                        {% amount_cell record.amount %}
                         {% for holder in holders %}
-                            <th scope="col">Share</th>
+                            {% amount_cell record.get_amount_map|get_item:holder.reference %}
                         {% endfor %}
                     </tr>
                 {% endfor %}
-
                 </tbody>
+                <tfoot class="thead-dark">
+                <tr>
+                    <th scope="col" colspan="2"></th>
+                    <th scope="col">{{ record_count }} transactions</th>
+                    <th scope="col">{{ total_amount }}</th>
+                    {% for holder in holders %}
+                        <th scope="col"></th>
+                        {#                        <th scope="col">{{ total_map|get_item:holder.reference }}</th>#}
+                    {% endfor %}
+                </tr>
+                </tfoot>
             </table>
             {% include 'payments/_table_buttons.html' %}
         </form>

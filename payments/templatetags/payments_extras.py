@@ -12,3 +12,8 @@ def accounting(value, arg):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+
+@register.inclusion_tag('payments/_amount_cell.html')
+def amount_cell(amount):
+    return {'amount': amount}

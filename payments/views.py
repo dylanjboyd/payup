@@ -1,5 +1,6 @@
 import re
 
+from django.db.models import Sum
 from django.shortcuts import render
 from tablib import Dataset
 
@@ -23,6 +24,9 @@ def index(request):
             record_resource.import_data(dataset, dry_run=False)  # Actually import now
 
     holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
+    record_count = BankRecord.objects.count()
+    total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
 
-    context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map}
+    context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
+               'record_count': record_count}
     return render(request, 'payments/index.html', context)
