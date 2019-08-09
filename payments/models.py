@@ -20,7 +20,7 @@ class RecordMeta(models.Model):
 class AccountHolder(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     reference = models.CharField(max_length=4, null=False, blank=False)
-    starting_balance = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2)
+    starting_balance = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2, default=0)
 
 
 class RecordShare(models.Model):
