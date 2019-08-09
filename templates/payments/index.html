@@ -25,6 +25,9 @@
                         <td>{{ record.reference }}</td>
                         <td>{{ record.description|truncatechars:45 }}</td>
                         <td class="text-right">{{ record.amount|intcomma }}</td>
+                        {% for holder in holders %}
+                            <th scope="col">Share</th>
+                        {% endfor %}
                     </tr>
                 {% endfor %}
 
