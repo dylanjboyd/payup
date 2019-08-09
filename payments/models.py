@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -9,3 +10,21 @@ class BankRecord(models.Model):
     reference = models.CharField(null=False, blank=False, max_length=4)
     description = models.CharField(null=False, blank=False, max_length=200)
     amount = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2)
+
+
+class RecordMeta(models.Model):
+    bank_record = models.OneToOneField(BankRecord, on_delete=models.CASCADE)
+    acknowledged = models.BooleanField()
+
+
+class AccountHolder(models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)
+    reference = models.CharField(max_length=4, null=False, blank=False)
+    starting_balance = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2)
+
+
+class RecordShare(models.Model):
+    record_meta = models.ForeignKey(RecordMeta, on_delete=models.CASCADE)
+    account_holder = models.ForeignKey(AccountHolder, on_delete=models.CASCADE)
+    share = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],
+                                             null=True, blank=True)
