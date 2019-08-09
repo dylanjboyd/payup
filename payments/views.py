@@ -1,3 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
+from payments.models import BankRecord, AccountHolder
+
+
+def index(request):
+    context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all()}
+    return render(request, 'payments/index.html', context)
