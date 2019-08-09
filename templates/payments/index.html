@@ -23,7 +23,7 @@
                     <tr>
                         <th scope="row">{{ record.date_processed }}</th>
                         <td>{{ record.reference }}</td>
-                        <td>{{ record.description }}</td>
+                        <td>{{ record.description|truncatechars:45 }}</td>
                         <td>{{ record.amount|intcomma }}</td>
                     </tr>
                 {% endfor %}
