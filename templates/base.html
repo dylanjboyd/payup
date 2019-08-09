@@ -7,8 +7,10 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class="page-header">
-    <h1><a href="/">PayUp</a></h1>
+<div class="text-center">
+    <img class="mx-auto my-4 src="{% static 'payments/payup_logo.png' %}"
+    srcset="{% static 'payments/payup_logo@2x.png' %} 2x,
+    {% static 'payments/payup_logo.png' %} 1x" alt="PayUp logo">
 </div>
 
 {% block content %}
