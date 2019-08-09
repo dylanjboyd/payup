@@ -14,6 +14,9 @@ class BankRecord(models.Model):
     def __str__(self):
         return self.description
 
+    class Meta:
+        ordering = ['-unique_id']
+
 
 class RecordMeta(models.Model):
     bank_record = models.OneToOneField(BankRecord, on_delete=models.CASCADE)
@@ -30,6 +33,9 @@ class AccountHolder(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['name']
 
 
 class RecordShare(models.Model):
