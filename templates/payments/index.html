@@ -12,7 +12,7 @@
                     <th scope="col">Date processed</th>
                     <th scope="col">Holder</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Amount ($)</th>
+                    <th class="text-right" scope="col">Amount ($)</th>
                     {% for holder in holders %}
                         <th scope="col">{{ holder }}</th>
                     {% endfor %}
@@ -24,7 +24,7 @@
                         <th scope="row">{{ record.date_processed }}</th>
                         <td>{{ record.reference }}</td>
                         <td>{{ record.description|truncatechars:45 }}</td>
-                        <td>{{ record.amount|intcomma }}</td>
+                        <td class="text-right">{{ record.amount|intcomma }}</td>
                     </tr>
                 {% endfor %}
 
