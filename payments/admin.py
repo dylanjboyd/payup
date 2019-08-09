@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from payments.models import BankRecord, RecordMeta, AccountHolder, RecordShare
+
+admin.site.register(BankRecord)
+admin.site.register(RecordMeta)
+admin.site.register(AccountHolder)
+admin.site.register(RecordShare)
