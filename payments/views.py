@@ -22,5 +22,7 @@ def index(request):
         if not result.has_errors():
             record_resource.import_data(dataset, dry_run=False)  # Actually import now
 
-    context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all()}
+    holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
+
+    context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map}
     return render(request, 'payments/index.html', context)
