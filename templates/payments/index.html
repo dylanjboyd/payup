@@ -3,32 +3,35 @@
 
 {% block content %}
     <div class="container">
-        {% include 'payments/_table_buttons.html' %}
-        <table class="table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">Date processed</th>
-                <th scope="col">Holder</th>
-                <th scope="col">Description</th>
-                <th scope="col">Amount ($)</th>
-                {% for holder in holders %}
-                    <th scope="col">{{ holder }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-            {% for record in records %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'payments/_table_buttons.html' %}
+            <table class="table">
+                <thead class="thead-dark">
                 <tr>
-                    <th scope="row">{{ record.date_processed }}</th>
-                    <td>{{ record.reference }}</td>
-                    <td>{{ record.description }}</td>
-                    <td>{{ record.amount|intcomma }}</td>
+                    <th scope="col">Date processed</th>
+                    <th scope="col">Holder</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Amount ($)</th>
+                    {% for holder in holders %}
+                        <th scope="col">{{ holder }}</th>
+                    {% endfor %}
                 </tr>
-            {% endfor %}
+                </thead>
+                <tbody>
+                {% for record in records %}
+                    <tr>
+                        <th scope="row">{{ record.date_processed }}</th>
+                        <td>{{ record.reference }}</td>
+                        <td>{{ record.description }}</td>
+                        <td>{{ record.amount|intcomma }}</td>
+                    </tr>
+                {% endfor %}
 
-            </tbody>
-        </table>
-        {% include 'payments/_table_buttons.html' %}
+                </tbody>
+            </table>
+            {% include 'payments/_table_buttons.html' %}
+        </form>
     </div>
 
 {% endblock %}

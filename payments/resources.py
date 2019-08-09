@@ -15,5 +15,6 @@ class BankRecordResource(resources.ModelResource):
 
     class Meta:
         model = BankRecord
+        import_id_fields = ('unique_id',)
         skip_unchanged = True
         report_skipped = False
