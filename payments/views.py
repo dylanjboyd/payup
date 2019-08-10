@@ -51,12 +51,13 @@ def edit(request):
         elif 'submit-shares' in request.POST:
             for share_key, share_value in share_map.items():
                 new_share_value = request.POST.get(share_key)
+                unique_id, reference = share_key.split('_')
                 if new_share_value == share_value or not (
                         new_share_value or share_value) or type(new_share_value) is int and (
-                        new_share_value > 100 or new_share_value < 1):
+                        new_share_value > 100 or new_share_value < 1) \
+                        or BankRecord.objects.get(pk=unique_id).amount < 0:
                     continue
 
-                unique_id, reference = share_key.split('_')
                 if not new_share_value and share_value:
                     RecordShare.objects.get(bank_record_id=unique_id, account_holder_id=reference).delete()
                 else:
