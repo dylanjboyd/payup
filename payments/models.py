@@ -57,14 +57,14 @@ class BankRecord(models.Model):
 
 class AccountHolderManager(models.Manager):
     def get_rounding_victim(self):
-        return self.order_by('rounding_likelihood', 'name', 'reference').first()
+        return self.order_by('-rounding_victim', 'name', 'reference').first()
 
 
 class AccountHolder(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     reference = models.CharField(max_length=4, null=False, blank=False, primary_key=True)
     starting_balance = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2, default=0)
-    rounding_likelihood = models.PositiveSmallIntegerField(null=True, blank=True, unique=True)
+    rounding_victim = models.BooleanField(default=False)
 
     objects = AccountHolderManager()
 
