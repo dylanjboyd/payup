@@ -57,7 +57,7 @@ class RecordShare(models.Model):
     bank_record = models.ForeignKey(BankRecord, on_delete=models.CASCADE)
     account_holder = models.ForeignKey(AccountHolder, on_delete=models.CASCADE)
     share = models.PositiveSmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],
-                                             null=True, blank=True)
+                                             null=False, blank=False)
 
     class Meta:
         unique_together = (('bank_record', 'account_holder'),)

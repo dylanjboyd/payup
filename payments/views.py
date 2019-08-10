@@ -11,15 +11,18 @@ from payments.resources import BankRecordResource
 
 
 def index(request):
+    return render(request, 'payments/index.html', get_shared_context())
+
+
+def get_shared_context():
     holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
     record_count = BankRecord.objects.count()
     total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
     total_map = {h.reference: get_holder_total(h) for h in
                  AccountHolder.objects.all()}
-
     context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
                'record_count': record_count, 'total_amount': total_amount, 'total_map': total_map}
-    return render(request, 'payments/index.html', context)
+    return context
 
 
 def edit(request):
@@ -44,31 +47,29 @@ def edit(request):
         elif 'submit-shares' in request.POST:
             for share_key, share_value in share_map.items():
                 new_share_value = request.POST.get(share_key)
-                if not new_share_value:
+                if new_share_value == share_value or not (
+                        new_share_value or share_value) or new_share_value > 100 or new_share_value < 1:
                     continue
 
                 unique_id, reference = share_key.split('_')
-                RecordShare.objects.update_or_create(share=new_share_value,
-                                                     defaults={'bank_record_id': unique_id,
-                                                               'account_holder_id': reference})
+                if not new_share_value and share_value:
+                    RecordShare.objects.get(bank_record_id=unique_id, account_holder_id=reference).delete()
+                else:
+                    RecordShare.objects.update_or_create(bank_record_id=unique_id,
+                                                         account_holder_id=reference,
+                                                         defaults={'share': new_share_value})
 
         return redirect('index')
 
-    holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
-    record_count = BankRecord.objects.count()
-    total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
-    total_map = {BankRecord.objects.filter(reference=h.reference).aggregate(Sum('amount'))['amount__sum'] for h in
-                 AccountHolder.objects.all()}
-
-    context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
-               'record_count': record_count, 'total_amount': total_amount, 'include_table_buttons': True,
-               'share_map': share_map, 'total_map': total_map}
+    context = get_shared_context()
+    context['include_table_buttons'] = True
+    context['share_map'] = share_map
 
     return render(request, 'payments/edit.html', context)
 
 
 def get_share_map():
-    return {f'{r.unique_id}_{h.reference}': r.find_share(r.reference) for
+    return {f'{r.unique_id}_{h.reference}': r.find_share(h.reference) for
             r, h in product(BankRecord.objects.all(), AccountHolder.objects.all())}
 
 
