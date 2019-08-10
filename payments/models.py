@@ -26,12 +26,26 @@ class BankRecord(models.Model):
         if self.recordshare_set.none() or sum_shares <= 0 or sum_shares > 100:
             return {h.reference: self.amount if self.reference == h.reference else 0 for h in
                     AccountHolder.objects.all()}
+
+        amount_map = {}
+        map_total = Decimal(0)
         with decimal.localcontext(decimal.Context(rounding=decimal.ROUND_HALF_UP)):
-            return {h.reference: round(Decimal(self.recordshare_set.get(
-                account_holder__reference=h.reference).share / 100) * self.amount, 2) if self.recordshare_set.filter(
-                account_holder__reference=h.reference).exists() else round(Decimal((100 - sum_shares) / (
-                    holder_count - valid_share_count)) / 100 * self.amount, 2) for h in
-                    AccountHolder.objects.all()}
+            for holder in AccountHolder.objects.all():
+                if self.recordshare_set.filter(
+                        account_holder__reference=holder.reference).exists():
+                    amount_map[holder.reference] = round(Decimal(self.recordshare_set.get(
+                        account_holder__reference=holder.reference).share / 100) * self.amount, 2)
+                else:
+                    amount_map[holder.reference] = round(Decimal((100 - sum_shares) / (
+                            holder_count - valid_share_count)) / 100 * self.amount, 2)
+
+                map_total += amount_map[holder.reference]
+
+        if map_total != self.amount:
+            rounding_victim = AccountHolder.objects.get_rounding_victim()
+            amount_map[rounding_victim.reference] += (self.amount - map_total)
+
+        return amount_map
 
     def find_share(self, reference):
         share_entity = self.recordshare_set.filter(account_holder__reference=reference).first()
