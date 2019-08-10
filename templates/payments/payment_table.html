@@ -56,6 +56,9 @@
                     {% for holder in holders %}
                         <td>{% amount_cell starting_balance_map|get_item:holder.reference %}</td>
                     {% endfor %}
+                    {% if include_table_buttons %}
+                        <td></td>
+                    {% endif %}
                 </tr>
                 </tbody>
                 <tfoot class="thead-dark">
