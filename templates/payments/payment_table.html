@@ -23,6 +23,13 @@
                         <th scope="col"></th>
                     {% endif %}
                 </tr>
+                <tr>
+                    <th scope="col" colspan="4"></th>
+                    {% for holder in holders %}
+                        <th scope="col"
+                            class="font-weight-normal">{% amount_cell total_map|get_item:holder.reference %}</th>
+                    {% endfor %}
+                </tr>
                 </thead>
                 <tbody>
                 {% for record in records %}
@@ -48,14 +55,23 @@
                         {% endif %}
                     </tr>
                 {% endfor %}
+                <tr class="table-info">
+                    <td colspan="2"></td>
+                    <td class="text-monospace">Starting balance</td>
+                    <td></td>
+                    {% for holder in holders %}
+                        <td>{% amount_cell starting_balance_map|get_item:holder.reference %}</td>
+                    {% endfor %}
+                </tr>
                 </tbody>
                 <tfoot class="thead-dark">
                 <tr>
                     <th scope="col" colspan="2"></th>
                     <th scope="col">{{ record_count }} transactions</th>
-                    <th scope="col">{% amount_cell total_amount %}</th>
+                    <th scope="col" class="font-weight-normal">{% amount_cell total_amount %}</th>
                     {% for holder in holders %}
-                        <th scope="col">{% amount_cell total_map|get_item:holder.reference %}</th>
+                        <th scope="col"
+                            class="font-weight-normal">{% amount_cell total_map|get_item:holder.reference %}</th>
                     {% endfor %}
                 </tr>
                 </tfoot>

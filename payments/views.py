@@ -20,14 +20,17 @@ def get_shared_context():
     total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
     total_map = {h.reference: get_holder_total(h) for h in
                  AccountHolder.objects.all()}
+    starting_balance_map = {h.reference: h.starting_balance for h in AccountHolder.objects.all()}
     context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
                'record_count': record_count, 'total_amount': total_amount, 'total_map': total_map,
-               'share_map': get_share_map()}
+               'share_map': get_share_map(), 'starting_balance_map': starting_balance_map}
     return context
 
 
 def edit(request):
     if request.method == 'POST':
+        share_map = get_share_map()
+
         if 'submit-file' in request.POST:
             uploaded_file = request.FILES.get('record-csv')
             record_resource = BankRecordResource()
