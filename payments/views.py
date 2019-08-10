@@ -1,4 +1,5 @@
 import re
+from decimal import Decimal
 from itertools import product
 
 from django.db.models import Sum
@@ -13,9 +14,11 @@ def index(request):
     holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
     record_count = BankRecord.objects.count()
     total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_map = {h.reference: get_holder_total(h) for h in
+                 AccountHolder.objects.all()}
 
     context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
-               'record_count': record_count, 'total_amount': total_amount}
+               'record_count': record_count, 'total_amount': total_amount, 'total_map': total_map}
     return render(request, 'payments/index.html', context)
 
 
@@ -54,10 +57,12 @@ def edit(request):
     holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
     record_count = BankRecord.objects.count()
     total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_map = {BankRecord.objects.filter(reference=h.reference).aggregate(Sum('amount'))['amount__sum'] for h in
+                 AccountHolder.objects.all()}
 
     context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
                'record_count': record_count, 'total_amount': total_amount, 'include_table_buttons': True,
-               'share_map': share_map}
+               'share_map': share_map, 'total_map': total_map}
 
     return render(request, 'payments/edit.html', context)
 
@@ -65,3 +70,11 @@ def edit(request):
 def get_share_map():
     return {f'{r.unique_id}_{h.reference}': r.find_share(r.reference) for
             r, h in product(BankRecord.objects.all(), AccountHolder.objects.all())}
+
+
+def get_holder_total(holder):
+    total = Decimal(0)
+    for record in BankRecord.objects.all():
+        total += (record.get_amount_map()[holder.reference] or 0)
+
+    return total

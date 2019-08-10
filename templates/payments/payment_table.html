@@ -25,10 +25,10 @@
                     <tr>
                         <th scope="row">{{ record.date_processed }}</th>
                         <td>{{ holder_map|get_item:record.reference }}</td>
-                        <td class="text-monospace">{{ record.description|truncatechars:45 }}</td>
-                        {% amount_cell record.amount %}
+                        <td class="text-monospace">{{ record.description|truncatechars:30 }}</td>
+                        <td>{% amount_cell record.amount %}</td>
                         {% for holder in holders %}
-                            {% block share_cell %}{% endblock %}
+                            <td>{% block share_cell %}{% endblock %}</td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -37,10 +37,9 @@
                 <tr>
                     <th scope="col" colspan="2"></th>
                     <th scope="col">{{ record_count }} transactions</th>
-                    <th scope="col">{{ total_amount|currency }}</th>
+                    <th scope="col">{% amount_cell total_amount %}</th>
                     {% for holder in holders %}
-                        <th scope="col"></th>
-                        {#                        <th scope="col">{{ total_map|get_item:holder.reference }}</th>#}
+                        <th scope="col">{% amount_cell total_map|get_item:holder.reference %}</th>
                     {% endfor %}
                 </tr>
                 </tfoot>
