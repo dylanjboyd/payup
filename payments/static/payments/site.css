@@ -1,3 +1,9 @@
 .share-input {
     width: 45px;
 }
+
+.edit-card {
+    position: fixed;
+    bottom: 0;
+    box-shadow: rgba(0, 0, 0, 0.2) 1px 2px 20px;
+}
