@@ -2,5 +2,6 @@
 
 <div class="text-monospace {% if is_negative %}text-success{% endif %}">
     <span>$</span>
-    <span class="float-right clearfix">{{ amount }}{% if not is_negative %}&nbsp;{% endif %}</span>
+    <span class="float-right clearfix {% if amount == '--' %}text-muted{% endif %}">{{ amount }}{% if not is_negative %}
+        &nbsp;{% endif %}</span>
 </div>
