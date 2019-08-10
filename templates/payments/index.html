@@ -5,4 +5,5 @@
 
 {% block share_cell %}
     {% amount_cell record.get_amount_map|get_item:holder.reference|default:'--' %}
+    {% share_display share_map record holder %}
 {% endblock %}

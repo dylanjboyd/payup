@@ -21,13 +21,12 @@ def get_shared_context():
     total_map = {h.reference: get_holder_total(h) for h in
                  AccountHolder.objects.all()}
     context = {'records': BankRecord.objects.all(), 'holders': AccountHolder.objects.all(), 'holder_map': holder_map,
-               'record_count': record_count, 'total_amount': total_amount, 'total_map': total_map}
+               'record_count': record_count, 'total_amount': total_amount, 'total_map': total_map,
+               'share_map': get_share_map()}
     return context
 
 
 def edit(request):
-    share_map = get_share_map()
-
     if request.method == 'POST':
         if 'submit-file' in request.POST:
             uploaded_file = request.FILES.get('record-csv')
@@ -63,7 +62,6 @@ def edit(request):
 
     context = get_shared_context()
     context['include_table_buttons'] = True
-    context['share_map'] = share_map
 
     return render(request, 'payments/edit.html', context)
 
