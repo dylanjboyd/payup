@@ -1,5 +1,4 @@
 import re
-from decimal import Decimal
 from itertools import product
 
 from django.db.models import Sum
@@ -75,7 +74,7 @@ def get_share_map():
 
 
 def get_holder_total(holder):
-    total = Decimal(0)
+    total = holder.starting_balance
     for record in BankRecord.objects.all():
         total += (record.get_amount_map()[holder.reference] or 0)
 
