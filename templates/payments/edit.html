@@ -4,7 +4,8 @@
 {% block title %}Edit Transactions{% endblock %}
 
 {% block share_cell %}
-    <div class="text-right"><input class="share-input" maxlength="3" name="{% share_map_key record holder %}"
+    <div class="text-right"><input id="share-{{ record.unique_id }}_{{ holder.reference }}" class="share-input"
+                                   maxlength="3" name="{% share_map_key record holder %}"
                                    type="text"
                                    value="{% share_map_value share_map record holder %}" pattern="\d{1,3}"> %
     </div>

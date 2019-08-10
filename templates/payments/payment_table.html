@@ -19,6 +19,9 @@
                     {% for holder in holders %}
                         <th scope="col" class="text-right">{{ holder }}</th>
                     {% endfor %}
+                    {% if include_table_buttons %}
+                        <th scope="col"></th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -34,6 +37,15 @@
                         {% for holder in holders %}
                             <td>{% block share_cell %}{% endblock %}</td>
                         {% endfor %}
+                        {% if include_table_buttons %}
+                            <td>
+                                <button type="button" class="btn btn-sm py-0 px-2 split-payments-button">
+                                    <img src="{% static 'payments/icons/split.png' %}"
+                                         srcset="{% static 'payments/icons/split@2x.png' %} 2x, {% static 'payments/icons/split.png' %} 1x"
+                                         alt="Split button ">
+                                </button>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -53,3 +65,17 @@
     </div>
 
 {% endblock %}
+
+{% if include_table_buttons %}
+    {% block scripts %}
+        <script type="application/javascript">
+            $('.split-payments-button').click(function (ev) {
+                let inputs = $('.share-input', ev.currentTarget.parentElement.parentElement);
+                for (let input of inputs) {
+                    input.value = 100 / inputs.length;
+                }
+            });
+        </script>
+    {% endblock %}
+
+{% endif %}
