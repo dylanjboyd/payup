@@ -1,3 +1,6 @@
+import decimal
+from decimal import Decimal
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Sum
@@ -23,11 +26,16 @@ class BankRecord(models.Model):
         if self.recordshare_set.none() or sum_shares <= 0 or sum_shares > 100:
             return {h.reference: self.amount if self.reference == h.reference else 0 for h in
                     AccountHolder.objects.all()}
-        return {h.reference: self.recordshare_set.get(
-            account_holder__reference=h.reference).share / 100 * self.amount if self.recordshare_set.filter(
-            account_holder__reference=h.reference).exists() else (100 - sum_shares) / (
-                holder_count - valid_share_count) * self.amount for h in
-                AccountHolder.objects.all()}
+        with decimal.localcontext(decimal.Context(rounding=decimal.ROUND_HALF_UP)):
+            return {h.reference: round(Decimal(self.recordshare_set.get(
+                account_holder__reference=h.reference).share / 100) * self.amount, 2) if self.recordshare_set.filter(
+                account_holder__reference=h.reference).exists() else round(Decimal((100 - sum_shares) / (
+                    holder_count - valid_share_count)) / 100 * self.amount, 2) for h in
+                    AccountHolder.objects.all()}
+
+    def find_share(self, reference):
+        share_entity = self.recordshare_set.filter(account_holder__reference=reference).first()
+        return share_entity.share if share_entity else None
 
     class Meta:
         ordering = ['-unique_id']
@@ -35,7 +43,7 @@ class BankRecord(models.Model):
 
 class AccountHolder(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
-    reference = models.CharField(max_length=4, null=False, blank=False)
+    reference = models.CharField(max_length=4, null=False, blank=False, primary_key=True)
     starting_balance = models.DecimalField(null=False, blank=False, max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):

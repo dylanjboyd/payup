@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load payments_extras %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="my-3">{% block title %}{% endblock %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'payments/_table_buttons.html' %}
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Date processed</th>
+                    <th scope="col">Holder</th>
+                    <th scope="col">Description</th>
+                    <th class="text-right" scope="col">Amount</th>
+                    {% for holder in holders %}
+                        <th scope="col" class="text-right">{{ holder }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in records %}
+                    <tr>
+                        <th scope="row">{{ record.date_processed }}</th>
+                        <td>{{ holder_map|get_item:record.reference }}</td>
+                        <td class="text-monospace">{{ record.description|truncatechars:45 }}</td>
+                        {% amount_cell record.amount %}
+                        {% for holder in holders %}
+                            {% block share_cell %}{% endblock %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot class="thead-dark">
+                <tr>
+                    <th scope="col" colspan="2"></th>
+                    <th scope="col">{{ record_count }} transactions</th>
+                    <th scope="col">{{ total_amount|currency }}</th>
+                    {% for holder in holders %}
+                        <th scope="col"></th>
+                        {#                        <th scope="col">{{ total_map|get_item:holder.reference }}</th>#}
+                    {% endfor %}
+                </tr>
+                </tfoot>
+            </table>
+            {% include 'payments/_table_buttons.html' %}
+        </form>
+    </div>
+
+{% endblock %}
