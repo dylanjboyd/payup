@@ -1,4 +1,5 @@
 import locale
+from decimal import Decimal
 
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.template.defaulttags import register
@@ -17,7 +18,12 @@ def get_item(dictionary, key):
 
 @register.inclusion_tag('payments/_amount_cell.html')
 def amount_cell(amount):
-    return {'amount': amount}
+    is_decimal = isinstance(amount, Decimal)
+    return {
+        'amount': (
+            '{0:,.2f}'.format(amount) if amount >= 0 else '({0:,.2f})'.format(abs(amount))) if is_decimal else amount,
+        'is_negative': is_decimal and amount < 0
+    }
 
 
 @register.filter

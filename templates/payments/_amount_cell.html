@@ -1,5 +1,5 @@
 {% load humanize %}
 
-<td class="text-monospace  {% if amount < 0 %}text-success font-weight-bold{% endif %}"><span
+<td class="text-monospace  {% if is_negative %}text-success font-weight-bold{% endif %}"><span
         class="float-left">$</span><span
-        class="float-right">{{ amount|intcomma }}</span>
+        class="float-right">{{ amount }}</span>
