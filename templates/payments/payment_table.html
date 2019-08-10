@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                 {% for record in records %}
-                    <tr>
+                    <tr class="{% if record.amount < 0 %}table-success{% endif %}">
                         <th scope="row">{{ record.date_processed }}</th>
                         <td><img src="{% holder_image holder_map|get_item:record.reference %}"
                                  alt="Account holder image"
