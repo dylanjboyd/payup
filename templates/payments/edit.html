@@ -4,6 +4,7 @@
 {% block title %}Edit Transactions{% endblock %}
 
 {% block share_cell %}
-    <input class="share-input" name="{% share_map_key record holder %}" type="text"
-           value="{% share_map_value share_map record holder %}"> %
+    <div class="text-right"><input class="share-input" name="{% share_map_key record holder %}" type="text"
+                                   value="{% share_map_value share_map record holder %}"> %
+    </div>
 {% endblock %}
