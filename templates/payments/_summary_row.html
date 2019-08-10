@@ -1,6 +1,7 @@
 <tr>
-    <th scope="col" colspan="2"
+    <th scope="col"
         class="{% if total_diff != 0 %}bg-danger{% else %}bg-success{% endif %}">{% amount_cell total_diff %}</th>
+    <th scope="col"></th>
     <th scope="col">{{ record_count }} transactions</th>
     <th scope="col" class="font-weight-normal">{% amount_cell total_amount %}</th>
     {% for holder in holders %}
