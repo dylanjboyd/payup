@@ -1,0 +1,9 @@
+<tr>
+    <th scope="col" colspan="2"></th>
+    <th scope="col">{{ record_count }} transactions</th>
+    <th scope="col" class="font-weight-normal">{% amount_cell total_amount %}</th>
+    {% for holder in holders %}
+        <th scope="col"
+            class="font-weight-normal">{% amount_cell total_map|get_item:holder.reference %}</th>
+    {% endfor %}
+</tr>

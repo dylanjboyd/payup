@@ -23,16 +23,7 @@
                         <th scope="col"></th>
                     {% endif %}
                 </tr>
-                <tr>
-                    <th scope="col" colspan="4"></th>
-                    {% for holder in holders %}
-                        <th scope="col"
-                            class="font-weight-normal">{% amount_cell total_map|get_item:holder.reference %}</th>
-                    {% endfor %}
-                    {% if include_table_buttons %}
-                        <th scope="col"></th>
-                    {% endif %}
-                </tr>
+                {% include 'payments/_summary_row.html' %}
                 </thead>
                 <tbody>
                 {% for record in records %}
@@ -68,15 +59,7 @@
                 </tr>
                 </tbody>
                 <tfoot class="thead-dark">
-                <tr>
-                    <th scope="col" colspan="2"></th>
-                    <th scope="col">{{ record_count }} transactions</th>
-                    <th scope="col" class="font-weight-normal">{% amount_cell total_amount %}</th>
-                    {% for holder in holders %}
-                        <th scope="col"
-                            class="font-weight-normal">{% amount_cell total_map|get_item:holder.reference %}</th>
-                    {% endfor %}
-                </tr>
+                {% include 'payments/_summary_row.html' %}
                 </tfoot>
             </table>
             {% include 'payments/_table_buttons.html' %}
