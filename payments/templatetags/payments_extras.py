@@ -13,7 +13,7 @@ def accounting(value, arg):
 
 @register.filter
 def get_item(dictionary, key):
-    return dictionary.get(key)
+    return dictionary.get(key) if type(dictionary) is dict else None
 
 
 @register.inclusion_tag('payments/_amount_cell.html')
