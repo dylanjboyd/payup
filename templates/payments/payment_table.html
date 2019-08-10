@@ -29,6 +29,9 @@
                         <th scope="col"
                             class="font-weight-normal">{% amount_cell total_map|get_item:holder.reference %}</th>
                     {% endfor %}
+                    {% if include_table_buttons %}
+                        <th scope="col"></th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>

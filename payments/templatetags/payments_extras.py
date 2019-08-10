@@ -51,3 +51,8 @@ def holder_image(holder_name, suffix=None):
 @register.inclusion_tag('payments/_share_display.html')
 def share_display(share_map, record, holder):
     return {'share_value': share_map_value(share_map, record, holder)}
+
+
+@register.inclusion_tag('payments/_total_verification.html')
+def total_verification(total_map):
+    return {'difference': 0}

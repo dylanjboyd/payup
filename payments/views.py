@@ -16,7 +16,8 @@ def index(request):
 def get_shared_context():
     holder_map = {h.reference: h.name for h in AccountHolder.objects.all()}
     record_count = BankRecord.objects.count()
-    total_amount = BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_amount = (BankRecord.objects.aggregate(Sum('amount'))['amount__sum'] or 0) + \
+                   (AccountHolder.objects.aggregate(Sum('starting_balance'))['starting_balance__sum'] or 0)
     total_map = {h.reference: get_holder_total(h) for h in
                  AccountHolder.objects.all()}
     starting_balance_map = {h.reference: h.starting_balance for h in AccountHolder.objects.all()}
@@ -49,7 +50,8 @@ def edit(request):
             for share_key, share_value in share_map.items():
                 new_share_value = request.POST.get(share_key)
                 if new_share_value == share_value or not (
-                        new_share_value or share_value) or new_share_value > 100 or new_share_value < 1:
+                        new_share_value or share_value) or type(new_share_value) is int and (
+                        new_share_value > 100 or new_share_value < 1):
                     continue
 
                 unique_id, reference = share_key.split('_')
