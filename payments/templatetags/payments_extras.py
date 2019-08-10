@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.template.defaulttags import register
+from django.templatetags.static import static
 
 
 def accounting(value, arg):
@@ -40,3 +41,8 @@ def share_map_value(share_map, record, holder):
 @register.simple_tag
 def share_map_key(record, holder):
     return f'{record.unique_id}_{holder.reference}'
+
+
+@register.simple_tag
+def holder_image(holder_name, suffix=None):
+    return static(f'payments/material-letters/{holder_name[:1]}{suffix if suffix else ""}.png')

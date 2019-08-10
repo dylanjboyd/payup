@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% load payments_extras %}
+{% load staticfiles %}
 
 {% block content %}
     <div class="container">
@@ -24,7 +25,10 @@
                 {% for record in records %}
                     <tr>
                         <th scope="row">{{ record.date_processed }}</th>
-                        <td>{{ holder_map|get_item:record.reference }}</td>
+                        <td><img src="{% holder_image holder_map|get_item:record.reference %}"
+                                 alt="Account holder image"
+                                 srcset="{% holder_image holder_map|get_item:record.reference '@2x' %} 2x, {% holder_image holder_map|get_item:record.reference %} 1x"> {{ holder_map|get_item:record.reference }}
+                        </td>
                         <td class="text-monospace">{{ record.description|truncatechars:30 }}</td>
                         <td>{% amount_cell record.amount %}</td>
                         {% for holder in holders %}
