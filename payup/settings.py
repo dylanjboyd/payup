@@ -9,6 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
+STATIC_ROOT = os.getenv('STATIC_ROOT', None)
 SECRET_KEY = '_zcr-ar788q$99l5u4b-yc+45ba=o4-64=kn%snox!#s%chrf@' if IS_DEV else os.getenv('SECRET_KEY')
 
 DEBUG = IS_DEV
