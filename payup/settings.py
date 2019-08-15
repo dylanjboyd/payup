@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_zcr-ar788q$99l5u4b-yc+45ba=o4-64=kn%snox!#s%chrf@' if IS_DEV else os.getenv('SECRET_KEY')
 
 DEBUG = IS_DEV
-ALLOWED_HOSTS = [] if IS_DEV else os.getenv('ALLOWED_HOSTS').split(';')
+ALLOWED_HOSTS = ['*'] if IS_DEV else os.getenv('ALLOWED_HOSTS').split(';')
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
