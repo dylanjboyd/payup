@@ -52,7 +52,7 @@ class BankRecord(models.Model):
         return share_entity.share if share_entity else None
 
     class Meta:
-        ordering = ['-unique_id']
+        ordering = ['-date_processed', '-unique_id']
 
 
 class AccountHolderManager(models.Manager):
