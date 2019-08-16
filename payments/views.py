@@ -31,11 +31,9 @@ def get_shared_context():
 
 def edit(request):
     if request.method == 'POST':
-        print('Post')
         share_map = get_share_map()
 
         if 'submit-file' in request.POST:
-            print('Post file')
             uploaded_file = request.FILES.get('record-csv')
             record_resource = BankRecordResource()
             dataset = Dataset()
